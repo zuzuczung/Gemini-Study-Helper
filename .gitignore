@@ -1,0 +1,24 @@
+# Local credentials and reference documents
+.env
+.env.*
+!.env.example
+credentials.json
+secrets.json
+*.pem
+*.key
+references/
+uploads/
+
+# Local browser screenshots can contain account information
+docs/*.png
+docs/*.jpg
+docs/*.jpeg
+
+# Generated packages, dependencies, and local editor/system files
+*.zip
+*.log
+node_modules/
+__pycache__/
+.DS_Store
+.vscode/
+.idea/
