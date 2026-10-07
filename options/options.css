@@ -1,0 +1,20 @@
+body { margin: 0; color: #1f2937; background: #f7f8fb; font: 16px/1.5 system-ui, sans-serif; }
+main { box-sizing: border-box; width: min(620px, calc(100% - 32px)); margin: 40px auto; padding: 28px; background: #fff; border: 1px solid #d9dee7; border-radius: 14px; box-shadow: 0 8px 28px #0000000c; }
+h1 { margin: 0 0 12px; font-size: 1.5rem; }
+label { display: block; margin: 20px 0 6px; font-weight: 650; }
+input, select { box-sizing: border-box; width: 100%; padding: 10px 12px; border: 1px solid #bfc7d4; border-radius: 8px; font: inherit; }
+input:focus-visible, button:focus-visible { outline: 2px solid #2563eb; outline-offset: 2px; }
+.actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+button { padding: 9px 14px; border: 1px solid #1d4ed8; border-radius: 8px; color: white; background: #1d4ed8; cursor: pointer; font: inherit; }
+button + button { color: #1d4ed8; background: white; }
+#status { min-height: 1.5em; font-weight: 600; }
+.note { padding: 12px; border-radius: 8px; background: #eff6ff; font-size: .9rem; }
+h2 { margin: 0 0 12px; font-size: 1.15rem; }
+section { border-top: 1px solid #e5e7eb; padding-top: 24px; margin-top: 28px; }
+main { width: min(800px, calc(100% - 32px)); }
+textarea { box-sizing: border-box; width: 100%; padding: 12px; border: 1px solid #bfc7d4; border-radius: 8px; font: inherit; resize: vertical; }
+button:disabled { opacity: .55; cursor: wait; }
+li { margin: 12px 0; overflow-wrap: anywhere; }
+li button { margin-left: 12px; padding: 2px 10px; font-size: .9rem; color: #1d4ed8; background: white; }
+#document-status { white-space: pre-wrap; }
+#connection-status, #lookup-status { overflow-wrap: anywhere; }

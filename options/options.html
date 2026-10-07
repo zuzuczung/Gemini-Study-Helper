@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cài đặt Gemini Study Helper</title>
+  <link rel="stylesheet" href="options.css">
+  <script src="../src/core.js" defer></script>
+  <script src="../src/documents.js" defer></script>
+  <script src="options.js" defer></script>
+</head>
+<body>
+  <main>
+    <h1>Gemini Study Helper</h1>
+    <p>Phiên bản 0.5.1 — Gemini và Groq.</p>
+    <p>Bôi đen <strong>cả câu hỏi và đủ bốn lựa chọn một lần</strong>. Đáp án là <strong>1/2/3/4 theo thứ tự từ trên xuống</strong>, kể cả đề có nhãn A/B/C/D. Nếu đề không có nhãn, câu hỏi và mỗi lựa chọn cần tách bằng xuống dòng hoặc dòng trống. Thả chuột để tự gửi tới AI; không cần Enter hoặc nút gửi.</p>
+    <p>Bỏ bôi đen hoặc đổi vùng chọn sẽ ẩn đáp án và ngăn phản hồi cũ đến muộn hiện lại. Trong lúc chờ, các lần chọn thêm bị bỏ qua; khi hoàn tất, bôi đen một lần để tra cứu tiếp.</p>
+    <p>Đáp án hiện bằng chữ đen ở góc dưới trái. Bỏ bôi đen hoặc nhấn <kbd>Esc</kbd> để đóng. Trạng thái tải và lỗi chỉ hiện tại đây và trên biểu tượng extension.</p>
+    <section aria-labelledby="config-title">
+      <h2>Chế độ trả lời</h2>
+      <label for="provider-mode">Dịch vụ sử dụng</label>
+      <select id="provider-mode" disabled>
+        <option value="auto">Tự động: Gemini → Groq khi hết quota</option>
+        <option value="groq">Chỉ dùng Groq</option>
+        <option value="gemini">Chỉ dùng Gemini</option>
+      </select>
+      <p class="note">Chế độ tự động chuyển sang Groq khi Gemini thiếu key, hết quota hoặc giới hạn tốc độ. Cần lưu Groq key trước. Mỗi dịch vụ được gọi sinh đáp án tối đa một lần cho một thao tác chọn; không gửi song song.</p>
+      <h2 id="config-title">Kết nối Gemini</h2>
+      <label for="key">Gemini API key</label>
+      <input id="key" type="password" autocomplete="off" spellcheck="false" maxlength="256" placeholder="Nhập khóa mới để lưu hoặc thay thế">
+      <p>Model mặc định: <code>gemini-3.5-flash-lite</code>. Dùng được với Gemini API key đã lưu; không cần key riêng cho từng model.</p>
+      <label for="model">ID model Gemini</label>
+      <input id="model" type="text" spellcheck="false" maxlength="100">
+      <div class="actions">
+        <button id="save" type="button" disabled>Lưu cài đặt</button>
+        <button id="test-connection" type="button" disabled>Lưu và kiểm tra Gemini</button>
+        <button id="delete-key" type="button" disabled>Xóa Gemini key</button>
+      </div>
+      <p id="status" role="status" aria-live="polite"></p>
+      <p id="connection-status" role="status" aria-live="polite">Chưa kiểm tra kết nối.</p>
+      <p class="note">Kiểm tra kết nối dùng model đã chọn để trả lời một câu hỏi mẫu nhỏ; có thể sử dụng quota. Khóa đã lưu không được hiển thị lại và không đưa vào trang web. Khóa nằm trong bộ nhớ cục bộ của extension, không phải kho bí mật trên máy chủ.</p>
+    </section>
+    <section aria-labelledby="groq-title">
+      <h2 id="groq-title">Kết nối Groq</h2>
+      <p>Model: <code>qwen/qwen3.8-27b</code>. Tạo khóa tại <a href="https://console.groq.com/keys" target="_blank" rel="noopener noreferrer">Groq Console</a>, rồi dán vào đây. Quota miễn phí tùy tài khoản và có giới hạn token/phút/ngày.</p>
+      <label for="groq-key">Groq API key</label>
+      <input id="groq-key" type="password" autocomplete="off" spellcheck="false" maxlength="256" placeholder="Nhập Groq key mới để lưu hoặc thay thế">
+      <div class="actions">
+        <button id="save-groq" type="button" disabled>Lưu cài đặt</button>
+        <button id="test-groq" type="button" disabled>Lưu và kiểm tra Groq</button>
+        <button id="delete-groq-key" type="button" disabled>Xóa Groq key</button>
+      </div>
+      <p id="groq-key-status"></p>
+      <p id="groq-connection-status" role="status" aria-live="polite">Chưa kiểm tra Groq.</p>
+    </section>
+    <section aria-labelledby="lookup-title">
+      <h2 id="lookup-title">Lần tra cứu gần nhất</h2>
+      <p id="lookup-status" role="status" aria-live="polite">Chưa có yêu cầu.</p>
+      <p id="context-status"></p>
+      <ul id="context-documents"></ul>
+    </section>
+    <section aria-labelledby="documents-title">
+      <h2 id="documents-title">Tài liệu tham khảo</h2>
+      <p>Nhập văn bản hoặc thêm PDF/TXT (UTF-8). Tối đa 12 tài liệu, 10 MB/tệp, 200 trang/PDF, 300.000 ký tự/tài liệu và tổng 1.000.000 ký tự. Vượt giới hạn sẽ bị từ chối, không cắt ngầm.</p>
+      <label for="document-name">Tên tài liệu</label>
+      <input id="document-name" type="text" maxlength="180" placeholder="Ví dụ: Ghi chú chương 1">
+      <label for="document-text">Nội dung văn bản</label>
+      <textarea id="document-text" rows="6" placeholder="Dán nội dung tham khảo…"></textarea>
+      <div class="actions"><button id="add-text" type="button" disabled>Thêm văn bản</button></div>
+      <label for="document-files">Tải tài liệu PDF/TXT</label>
+      <input id="document-files" type="file" accept=".pdf,.txt,application/pdf,text/plain" multiple disabled>
+      <p id="document-status" role="status" aria-live="polite"></p>
+      <ul id="documents"></ul>
+      <p class="note">PDF chỉ đọc lớp văn bản. Chưa hỗ trợ OCR, ảnh hay biểu đồ; PDF scan hoàn toàn sẽ không được lưu. Mỗi lần tra cứu chọn các đoạn liên quan (tối đa 24.000 ký tự). Gemini đếm token chính xác; Groq kiểm tra giới hạn an toàn bằng số byte UTF-8 và phần dự phòng, rồi báo token thực tế nếu API cung cấp. Vượt trần 16.000 sẽ báo lỗi, không cắt ngầm. Phần đã gửi được báo rõ ở “Lần tra cứu gần nhất”.</p>
+    </section>
+    <p class="note">Sau một lần bôi đen hoàn tất, câu hỏi và các đoạn tài liệu được chọn sẽ gửi tới dịch vụ đã cấu hình. Chế độ tự động có thể gửi cùng dữ liệu tới Groq khi Gemini bị từ chối vì quota. Bỏ chọn chỉ ngăn hiển thị kết quả, không hủy yêu cầu đã gửi. Tài liệu được lưu cục bộ; việc thêm tài liệu chưa gửi nội dung tới dịch vụ AI. Extension không đọc toàn trang và không tự làm theo chỉ dẫn trong tài liệu.</p>
+  </main>
+</body>
+</html>
