@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="660" viewBox="0 0 1100 660" role="img" aria-labelledby="title desc">
+  <title id="title">Kiểm tra focus và visibility trên trang cục bộ</title>
+  <desc id="desc">Hình minh họa hướng dẫn mở focus-log.html, bôi đen câu hỏi và kiểm tra nhật ký không có blur hoặc visibilitychange do thao tác bôi đen.</desc>
+  <rect width="1100" height="660" rx="20" fill="#f1f5fc"/>
+  <g font-family="Arial, Helvetica, sans-serif">
+    <rect x="34" y="30" width="48" height="48" rx="14" fill="#315bdc"/>
+    <text x="51" y="63" font-size="25" fill="white" font-weight="700">4</text>
+    <text x="101" y="62" font-size="32" fill="#162e44" font-weight="700">Kiểm tra focus tại máy của bạn</text>
+    <text x="36" y="112" font-size="20" fill="#53657c">Trang kiểm tra cục bộ ghi nhận các sự kiện trình duyệt khi bạn bôi đen.</text>
+
+    <rect x="36" y="148" width="676" height="446" rx="16" fill="white" stroke="#d3deee"/>
+    <rect x="36" y="148" width="676" height="43" fill="#e6edf7"/>
+    <circle cx="62" cy="169" r="6" fill="#ff6b6b"/><circle cx="82" cy="169" r="6" fill="#ffc145"/><circle cx="102" cy="169" r="6" fill="#4bbf73"/>
+    <text x="125" y="176" font-size="17" fill="#53657c">127.0.0.1:4187/tests/fixtures/focus-log.html</text>
+
+    <text x="67" y="230" font-size="24" fill="#162e44" font-weight="700">Trạng thái hiện tại</text>
+    <rect x="67" y="249" width="275" height="74" rx="11" fill="#eaf7ef" stroke="#b9e1c7"/>
+    <text x="87" y="279" font-size="18" fill="#267849">visibility: visible</text>
+    <text x="87" y="307" font-size="18" fill="#267849">hasFocus: true</text>
+    <rect x="367" y="249" width="282" height="74" rx="11" fill="#eef3ff" stroke="#cbd9fb"/>
+    <text x="387" y="279" font-size="18" fill="#315bdc" font-weight="700">1. Bôi đen câu hỏi</text>
+    <text x="387" y="307" font-size="17" fill="#53657c">rồi thả chuột</text>
+
+    <text x="67" y="371" font-size="23" fill="#162e44" font-weight="700">Nhật ký sự kiện</text>
+    <rect x="67" y="389" width="582" height="151" rx="10" fill="#17283b"/>
+    <text x="88" y="422" font-size="18" fill="#b9d6ff">✓ document: selectionchange</text>
+    <text x="88" y="454" font-size="18" fill="#b9d6ff">✓ document: selectionchange</text>
+    <text x="88" y="486" font-size="18" fill="#b9d6ff">✓ document: selectionchange</text>
+    <text x="88" y="521" font-size="17" fill="#8ea9c4">Không có window: blur hay visibilitychange</text>
+
+    <rect x="745" y="148" width="319" height="446" rx="16" fill="#e7efff"/>
+    <text x="772" y="197" font-size="23" fill="#162e44" font-weight="700">Cách đọc kết quả</text>
+    <text x="772" y="241" font-size="19" fill="#162e44">Khi chỉ bôi đen, log có</text>
+    <text x="772" y="270" font-size="19" fill="#162e44">selectionchange là bình thường.</text>
+    <line x1="772" y1="303" x2="1033" y2="303" stroke="#bbcae1"/>
+    <text x="772" y="344" font-size="20" fill="#267849" font-weight="700">Không có blur / visibilitychange</text>
+    <text x="772" y="376" font-size="18" fill="#53657c">→ thao tác chọn không làm</text>
+    <text x="772" y="404" font-size="18" fill="#53657c">tab cục bộ mất focus/ẩn.</text>
+    <line x1="772" y1="437" x2="1033" y2="437" stroke="#bbcae1"/>
+    <text x="772" y="476" font-size="18" fill="#53657c">Đây chỉ là thử nghiệm cục bộ;</text>
+    <text x="772" y="504" font-size="18" fill="#53657c">không thay thế quiz log hay</text>
+    <text x="772" y="532" font-size="18" fill="#53657c">hệ thống giám sát của LMS.</text>
+    <text x="36" y="636" font-size="14" fill="#61738a" font-weight="700">MINH HỌA KIỂM TRA CỤC BỘ · GEMINI STUDY HELPER 0.5.1</text>
+  </g>
+</svg>
