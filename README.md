@@ -1,3 +1,10 @@
+
+
+## Kiểm tra focus/visibility tại máy của bạn
+
+Khi cần tự kiểm tra thao tác bôi đen có làm **trang cục bộ** mất focus hoặc bị ẩn không, chạy `node tests/fixtures/serve.js` rồi mở `http://127.0.0.1:4187/tests/fixtures/focus-log.html`. Bôi đen một câu hỏi và xem nhật ký: nhiều `selectionchange` là bình thường; không có `window:blur` hay `visibilitychange` nghĩa là thao tác chọn không tạo các tín hiệu đó trên trang thử nghiệm. Đây **không phải** Canvas, không mô phỏng hay kết luận được quiz log/proctoring phía máy chủ.
+
+![Minh họa trang kiểm tra focus cục bộ với trạng thái visible và hasFocus true, nhật ký selectionchange](docs/images/focus-check.svg)
 # Gemini Study Helper
 
 Nguồn ban đầu: [nchh06/Web-Question-Assistant](https://github.com/nchh06/Web-Question-Assistant). Bản này bổ sung và sửa cơ chế bôi đen, giao diện, tài liệu tham chiếu và kết nối Gemini/Groq. PDF.js đóng gói trong `vendor/pdfjs` giữ nguyên giấy phép và thông báo của thư viện.
