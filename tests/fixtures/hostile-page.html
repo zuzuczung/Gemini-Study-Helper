@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><title>Selection and overlay browser check</title>
+<style>
+body { margin: 40px; background: #f4f6fa; color: #161616; font: 20px/1.5 system-ui; }
+div { display: none !important; position: static !important; pointer-events: auto !important; }
+#question { margin-top: 40px; width: max-content; }
+</style>
+<h1>Selection test</h1>
+<p id="question">2 + 2? A. 3 B. 4 C. 5 D. 6</p>
+<p>Requests: <output id="requests">0</output></p>
+<button id="under">Page button</button><output id="clicks">0</output>
+<textarea aria-label="Private input">PRIVATE INPUT</textarea>
+<script>
+  let calls = 0;
+  window.chrome = {runtime: {sendMessage(message) {
+    if (message.type === 'LOOKUP_SELECTION') document.getElementById('requests').textContent = String(++calls);
+    return Promise.resolve({ok: true, answer: '2'});
+  }}};
+  document.getElementById('under').addEventListener('click', () => document.getElementById('clicks').textContent = String(Number(document.getElementById('clicks').textContent) + 1));
+</script>
+<script src="../../src/core.js"></script>
+<script src="../../src/content.js"></script>
+</html>

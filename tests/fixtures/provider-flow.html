@@ -1,0 +1,36 @@
+<!doctype html><html lang="vi"><meta charset="utf-8"><title>Gemini → Groq — API giả lập</title>
+<style>body{margin:32px;color:#161616;background:#f4f6fa;font:18px/1.5 system-ui}.question{white-space:pre-line;width:max-content;padding:12px;border:1px solid #8797ab}textarea{display:block;width:350px;height:60px}</style>
+<h1>Gemini hết quota → tự chuyển Groq</h1>
+<p>API giả lập: mỗi lần chọn gửi một message, Gemini từ chối vì quota; Groq trả lời sau 4 giây. Không nhập key thật.</p>
+<p class="question" id="math">2 + 2?
+3
+4
+5
+6</p>
+<p>Message: <output id="messages">0</output> | Gemini sinh đáp án: <output id="gemini">0</output> | Groq sinh đáp án: <output id="groq">0</output> | Phản hồi Groq: <output id="completed">0</output></p>
+<p id="lookup-status">Chưa có yêu cầu.</p>
+<label for="typing">Ô kiểm tra focus</label><textarea id="typing"></textarea>
+<p>Focus: <output id="focus-result">Chưa kiểm tra</output> | Vùng chọn: <output id="selection-result">Chưa kiểm tra</output></p>
+<script src="../../src/core.js"></script><script src="../../src/documents.js"></script>
+<script>
+let listener, counts={messages:0,gemini:0,groq:0,completed:0};
+const data={geminiApiKey:'fixture-gemini',groqApiKey:'fixture-groq',providerMode:'auto'};
+const update=name=>document.getElementById(name).textContent=String(++counts[name]);
+window.fetch=async(url,init)=>{
+ if(String(url).startsWith('https://api.groq.com/')){
+  update('groq');return new Promise(resolve=>setTimeout(()=>{
+   update('completed');resolve({ok:true,json:async()=>({choices:[{finish_reason:'stop',message:{content:'2'}}],usage:{prompt_tokens:210}})});
+  },4000));
+ }
+ if(String(url).endsWith(':generateContent')){update('gemini');return {ok:false,status:429,json:async()=>({error:{message:'daily quota exceeded'}})}}
+ return {ok:true,json:async()=>String(url).endsWith(':countTokens')?{totalTokens:210}:{inputTokenLimit:1048576,supportedGenerationMethods:['generateContent']}};
+};
+window.chrome={runtime:{id:'fixture',getURL:p=>new URL('/'+p,location.origin).href,onMessage:{addListener:f=>listener=f},openOptionsPage:async()=>{},
+ sendMessage:m=>{
+  if(m.type==='LOOKUP_SELECTION')update('messages');
+  return new Promise(resolve=>listener(m,{id:'fixture',url:location.href,tab:{id:1},frameId:0,documentId:'fixture'},r=>{
+   const focused=document.activeElement,selection=window.getSelection().toString();resolve(r);
+   setTimeout(()=>{document.getElementById('focus-result').textContent=focused===document.activeElement?'PASS':'FAIL';document.getElementById('selection-result').textContent=selection===window.getSelection().toString()?'PASS':'FAIL'},0);
+  }));
+ }},action:{onClicked:{addListener(){}},setBadgeText:async()=>{},setTitle:async()=>{}},storage:{local:{setAccessLevel:async()=>{},get:async keys=>Object.fromEntries(keys.filter(k=>k in data).map(k=>[k,data[k]])),set:async values=>{Object.assign(data,values);if(values.lookupStatus)document.getElementById('lookup-status').textContent=values.lookupStatus.message},remove:async key=>delete data[key]}}};
+</script><script src="../../src/background.js"></script><script src="../../src/content.js"></script></html>

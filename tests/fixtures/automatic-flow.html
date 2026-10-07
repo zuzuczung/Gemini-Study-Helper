@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="vi"><meta charset="utf-8"><title>Kiểm tra tự gửi và focus — API giả lập</title>
+<style>
+body { margin: 32px; background: #f4f6fa; color: #161616; font: 18px/1.5 system-ui; }
+.question { width: max-content; padding: 10px; border: 1px solid #8797ab; white-space: pre-line; }
+textarea { display: block; width: 380px; height: 60px; }
+</style>
+<h1>Tự gửi và focus — API giả lập</h1>
+<p>Bôi đen một lần, thả chuột: tự gửi và trả lời sau 12 giây. Bỏ bôi đen để ẩn đáp án; bỏ chọn lúc đang chờ thì kết quả đến muộn không hiện.</p>
+<p id="math" class="question">2 + 2?
+A. 3
+B. 4
+C. 5
+D. 6</p>
+<p id="planet" class="question">Third planet? D. Earth B. Mars A. Venus C. Mercury</p>
+<p id="unlabeled" class="question">2 + 2?
+3
+4
+5
+6</p>
+<p>Yêu cầu trả lời: <output id="requests">0</output> | Hoàn tất: <output id="completed">0</output></p>
+<label for="typing">Ô thử focus: có thể gõ trong lúc chờ</label>
+<textarea id="typing"></textarea>
+<p>Focus khi phản hồi: <output id="focus-result">Chưa kiểm tra</output></p>
+<p>Vùng chọn khi phản hồi: <output id="selection-result">Chưa kiểm tra</output></p>
+<p>Đây là mô phỏng kênh extension, không gọi Gemini, không nhập API key ở đây.</p>
+<p>Thao tác chọn: <output id="gesture-result">Chưa chọn</output></p>
+<script>
+  let calls = 0, completed = 0;
+  let gestures = 0;
+  document.addEventListener('pointerup', event => {
+    if (!event.isTrusted || event.button !== 0) return;
+    setTimeout(() => {
+      document.getElementById('gesture-result').textContent = `${++gestures} lần thả chuột; vùng chọn ${window.getSelection().toString().length} ký tự`;
+    }, 0);
+  });
+  window.chrome = {runtime: {sendMessage(message) {
+    if (message.type !== 'LOOKUP_SELECTION') return Promise.resolve({ok: true});
+    const parsed = ExplainCore.parseQuestion(message.text);
+    if (!parsed.ok) return Promise.resolve(parsed);
+    document.getElementById('requests').textContent = String(++calls);
+    return new Promise(resolve => setTimeout(() => {
+      const focused = document.activeElement;
+      const selected = window.getSelection().toString();
+      resolve({ok: true, answer: message.text.includes('Third planet') ? '1' : '2'});
+      setTimeout(() => {
+        document.getElementById('completed').textContent = String(++completed);
+        document.getElementById('focus-result').textContent = (focused === document.activeElement ? 'PASS — giữ nguyên ' : 'FAIL — đổi từ ') + focused.tagName;
+        document.getElementById('selection-result').textContent = selected === window.getSelection().toString() ? 'PASS — giữ nguyên' : 'FAIL — thay đổi';
+      }, 0);
+    }, 12000));
+  }}};
+</script>
+<script src="../../src/core.js"></script>
+<script src="../../src/content.js"></script>
+</html>

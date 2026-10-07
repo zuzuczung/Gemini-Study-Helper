@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Thử extension Gemini thật</title>
+  <style>
+    body { margin: 0; padding: 36px 36px 100px; background: #f4f6fa; color: #161616; font: 18px/1.6 system-ui, sans-serif; }
+    main { max-width: 860px; margin: auto; }
+    h1 { font-size: 28px; }
+    article { margin: 26px 0; padding: 22px; border: 1px solid #61718c; border-radius: 10px; background: #fff; }
+    .question { white-space: pre-line; }
+    label { display: block; }
+    textarea { width: min(100%, 500px); min-height: 65px; font: inherit; }
+    .note { color: #475569; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Thử extension Gemini thật</h1>
+  <p>Trang này không giả lập API hoặc extension. Cần nạp extension trong Chrome, lưu API key trong cài đặt extension, rồi tải lại trang này.</p>
+  <p>Bôi đen toàn bộ một khối câu hỏi bên dưới một lần rồi thả chuột: extension tự gửi yêu cầu. Bỏ bôi đen để ẩn đáp án; bỏ chọn khi đang chờ thì phản hồi đến muộn không hiện. Theo dõi trạng thái bằng biểu tượng extension và trang cài đặt.</p>
+  <article>
+    <div class="question">2 + 2 bằng bao nhiêu?
+A. 3
+B. 4
+C. 5
+D. 6</div>
+  </article>
+  <article>
+    <div class="question">Hành tinh nào là hành tinh thứ ba tính từ Mặt Trời?
+D. Trái Đất
+B. Sao Hỏa
+A. Sao Kim
+C. Sao Thủy</div>
+  </article>
+  <p class="note">Kết quả mong đợi: câu đầu 2, câu sau 1. Chữ đen xuất hiện cố định góc dưới trái. Bỏ bôi đen hoặc Esc đóng. Chờ yêu cầu trước hoàn tất rồi chọn câu khác một lần. Không nhập API key vào trang này.</p>
+  <label for="private">Ô nhập để kiểm tra loại trừ vùng chỉnh sửa</label>
+  <textarea id="private">Văn bản trong ô nhập không được gửi đi.</textarea>
+</main>
+</body>
+</html>

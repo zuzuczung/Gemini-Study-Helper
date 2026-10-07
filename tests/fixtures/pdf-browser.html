@@ -1,0 +1,21 @@
+<!doctype html><meta charset="utf-8"><title>Actual PDF.js extraction check</title>
+<h1>Actual PDF.js extraction check</h1><pre id="result">Running…</pre>
+<script src="../../src/documents.js"></script>
+<script type="module">
+import * as pdfjs from '../../vendor/pdfjs/pdf.mjs';
+pdfjs.GlobalWorkerOptions.workerSrc = '/vendor/pdfjs/pdf.worker.mjs';
+const loadPdf = async () => ({getDocument: config => pdfjs.getDocument({...config, cMapUrl: '/vendor/pdfjs/cmaps/', cMapPacked: true, standardFontDataUrl: '/vendor/pdfjs/standard_fonts/'})});
+const results = [];
+for (const name of ['text.pdf', 'mixed.pdf', 'image-only.pdf', 'broken.pdf']) {
+  try {
+    const response = await fetch('/tests/fixtures/' + name);
+    const file = new File([await response.arrayBuffer()], name, {type: 'application/pdf'});
+    const extracted = await StudyDocuments.readFile(file, loadPdf);
+    const expected = name === 'text.pdf' ? extracted.pages === 1 && extracted.text.includes('Four is the answer') : name === 'mixed.pdf' && extracted.pages === 2 && extracted.emptyPages[0] === 2;
+    results.push({name, passed: expected, status: extracted.readStatus, text: extracted.text});
+  } catch (error) {
+    results.push({name, passed: name === 'image-only.pdf' ? /OCR/.test(error.message) : name === 'broken.pdf' && /không hợp lệ/.test(error.message), error: error.message});
+  }
+}
+document.getElementById('result').textContent = JSON.stringify({passed: results.every(r => r.passed), results}, null, 2);
+</script>

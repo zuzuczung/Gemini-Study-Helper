@@ -1,0 +1,2 @@
+Phép cộng: 2 + 2 = 4.
+Tài liệu kiểm tra UTF-8.
