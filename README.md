@@ -4,6 +4,28 @@ Nguồn ban đầu: [nchh06/Web-Question-Assistant](https://github.com/nchh06/We
 
 Extension Manifest V3, JavaScript thuần: bôi đen câu hỏi **một lần** để tự tra cứu Gemini/Groq khi thả chuột. Không cần Alt+Q, chọn lần hai, Enter hoặc nút gửi. Từ bản **0.4.0**, đáp án hợp lệ chỉ là **1, 2, 3 hoặc 4 theo thứ tự lựa chọn từ trên xuống**, chữ đen, nền trong suốt ở góc dưới trái. **Bỏ bôi đen** hoặc nhấn **Esc** để đóng.
 
+## Bắt đầu bằng hình ảnh
+
+Các hình dưới đây là minh họa thao tác, không chứa API key hay thông tin tài khoản. Tên nút có thể khác theo ngôn ngữ của Chrome.
+
+### 1. Tải và cài extension
+
+Trên repo, chọn **Code → Download ZIP**, giải nén. Mở `chrome://extensions`, bật **Developer mode**, chọn **Load unpacked** và chọn thư mục có `manifest.json`. Nếu cập nhật bản cũ, bấm **Reload** rồi tải lại trang web bằng **⌘R** trên Mac hoặc **Ctrl+R** trên Windows.
+
+![Minh họa tải ZIP, giải nén và nạp thư mục chứa manifest.json vào Chrome](docs/images/install.svg)
+
+### 2. Lưu API key và kiểm tra kết nối
+
+Bấm biểu tượng extension để mở cài đặt. Nhập key riêng của bạn và bấm **Lưu và kiểm tra Gemini**. Nếu dùng Groq, nhập key tại phần **Kết nối Groq**, bấm **Lưu và kiểm tra Groq** rồi chọn chế độ sử dụng và lưu. Muốn tự động dự phòng, chọn **Tự động: Gemini → Groq khi hết quota** và lưu cả hai key. Không nhập key vào trang câu hỏi.
+
+![Minh họa cài đặt dịch vụ, nhập key riêng và kiểm tra kết nối; ô key trong ảnh để trống](docs/images/settings.svg)
+
+### 3. Bôi đen một lần, giữ vùng chọn để xem đáp án
+
+Kéo chọn **cả câu hỏi và đủ bốn lựa chọn**, rồi thả chuột. Giữ vùng chọn trong lúc chờ; đáp án **1–4** hiện ở góc dưới trái, tương ứng thứ tự lựa chọn từ trên xuống. **Bỏ bôi đen sẽ ẩn đáp án ngay**, kể cả khi AI chưa trả lời. Nếu không hiện kết quả, mở cài đặt và xem **Lần tra cứu gần nhất**; trong lúc chờ, chọn thêm không gửi yêu cầu mới.
+
+![Minh họa chọn câu hỏi 2 cộng 2 cùng bốn lựa chọn; số 2 ở góc dưới trái là lựa chọn thứ hai, giá trị 4](docs/images/selection.svg)
+
 ## Bản 0.5.1 — Gemini 3.5 Flash-Lite + Groq
 
 Gemini chính mặc định là `gemini-3.5-flash-lite`, dùng `thinkingLevel: minimal` đúng theo model. Khi reload bản này, nếu cấu hình đang là mặc định cũ `gemini-3.8-flash` hoặc chưa có model, extension đổi một lần sang Flash-Lite và yêu cầu kiểm tra kết nối lại. Không đọc/ghi lại key trong bước chuyển; model tùy chỉnh khác được giữ. Chọn chế độ **Tự động** để Gemini chính và Groq dự phòng; nếu đang chọn **Chỉ dùng Groq**, cần đổi chế độ và Lưu. Gemini key hiện tại dùng được cho model mới nếu project có quyền/quota; tạo key khác cùng project không thêm quota.
