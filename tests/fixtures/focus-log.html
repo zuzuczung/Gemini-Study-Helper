@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="vi">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kiểm tra focus và visibility — Gemini Study Helper</title>
+<style>
+  :root { color-scheme: light; font-family: system-ui, sans-serif; color: #17243a; background: #eef3fb; }
+  body { max-width: 880px; margin: 0 auto; padding: 28px; }
+  .card { margin: 18px 0; padding: 22px; border: 1px solid #c7d3e6; border-radius: 12px; background: white; }
+  .question { font-size: 21px; line-height: 1.7; user-select: text; }
+  .choice { margin-left: 16px; }
+  .status { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .status div, pre { padding: 12px; border-radius: 8px; background: #f4f7fb; }
+  pre { overflow: auto; min-height: 86px; white-space: pre-wrap; }
+  button { padding: 9px 13px; border: 0; border-radius: 8px; background: #315bdc; color: white; font-weight: 650; cursor: pointer; }
+  .note { color: #52647c; }
+</style>
+<body>
+  <h1>Kiểm tra focus/visibility cục bộ</h1>
+  <p class="note">Trang này ghi các tín hiệu phía trình duyệt; không kết nối Canvas và không mô phỏng được log máy chủ hay phần mềm proctoring.</p>
+
+  <section class="card">
+    <div class="status">
+      <div>Visibility: <strong id="visibility">—</strong></div>
+      <div>Has focus: <strong id="focus">—</strong></div>
+    </div>
+  </section>
+
+  <section class="card question" aria-label="Câu hỏi để bôi đen">
+    <strong>2 + 2 bằng bao nhiêu?</strong><br>
+    <span class="choice">A. 3</span><br>
+    <span class="choice">B. 4</span><br>
+    <span class="choice">C. 5</span><br>
+    <span class="choice">D. 6</span>
+  </section>
+
+  <section class="card">
+    <button id="clear" type="button">Xóa log</button>
+    <button id="copy" type="button">Sao chép log</button>
+    <p class="note">Quy trình: xóa log → bôi đen cả câu hỏi và 4 đáp án một lần → chờ kết quả → xem log. Nếu thao tác bôi đen làm tab mất focus, log sẽ có sự kiện tương ứng.</p>
+    <pre id="log" aria-live="polite">Chưa có sự kiện.</pre>
+  </section>
+
+<script>
+  (() => {
+    const events = [];
+    const log = document.querySelector('#log');
+    const visibility = document.querySelector('#visibility');
+    const focus = document.querySelector('#focus');
+    const stamp = () => new Date().toLocaleTimeString('vi-VN', { hour12: false });
+
+    function updateStatus() {
+      visibility.textContent = document.visibilityState;
+      focus.textContent = document.hasFocus() ? 'true' : 'false';
+    }
+    function record(name) {
+      updateStatus();
+      events.push(`${stamp()}  ${name}  | visibility=${document.visibilityState}, hasFocus=${document.hasFocus()}`);
+      log.textContent = events.join('\n');
+    }
+
+    ['visibilitychange', 'fullscreenchange', 'focusin', 'focusout', 'selectionchange'].forEach(name =>
+      document.addEventListener(name, () => record(`document:${name}`))
+    );
+    window.addEventListener('focus', () => record('window:focus'));
+    window.addEventListener('blur', () => record('window:blur'));
+    window.addEventListener('pagehide', () => record('window:pagehide'));
+
+    document.querySelector('#clear').addEventListener('click', () => {
+      events.length = 0;
+      log.textContent = 'Đã xóa log.';
+      updateStatus();
+    });
+    document.querySelector('#copy').addEventListener('click', async () => {
+      await navigator.clipboard.writeText(events.join('\n'));
+      record('local:copied-log');
+    });
+    updateStatus();
+  })();
+</script>
+</body>
+</html>
